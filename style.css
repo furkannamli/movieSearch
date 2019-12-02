@@ -1,0 +1,153 @@
+.navbar{
+    background-color: darkcyan;
+}
+
+html, body{
+    background-color: black;
+    overflow-x: hidden;
+}
+
+h1, h2, h3, h4, h5{
+    font-family: 'Bebas Neue', cursive;
+}
+
+p, span, li{
+    font-family: 'Roboto', sans-serif;
+   list-style: none;
+}
+
+ul{
+    padding-inline-start: 16px;
+}
+
+@keyframes slide {
+    from { background-position: 0 0; }
+    to { background-position: +4000px 0px; }
+}
+
+.home{
+    background-image: url("bg.jpg");
+    animation: slide 75s linear infinite;
+    height: 100vh;
+}
+
+.form-control{
+    width: 50%;
+}
+
+.searchPage li{
+    list-style: none;
+    float: left;
+}
+
+.card{
+    align-items: center;
+    text-align: center;
+    border: 1px solid white;
+    margin: 10px;
+    min-height: 80vh;
+    width: 350px;
+}
+
+.card .movie-title{
+    color: black;
+    font-family: 'Fira Sans', sans-serif;
+}
+
+.card .movie-year{
+    color: black;
+}
+
+.thumbnail{
+    width: 75%;
+    min-height: 525px;
+    min-width: 325px;
+    border-radius: 10px;
+}
+
+.active{
+    font-weight: bold;
+}
+
+.marginl-4{
+    margin-left: 2.5rem !important;
+    margin-top: 25px;
+    border-radius: 15px;
+}
+
+hr{
+    color: black;
+    width: 75%;
+    border: solid .5px;
+    margin: 1px auto;
+}
+
+.movie-detail{
+    background-color: white;
+    border-radius: 25px;
+}
+
+.movie-poster{
+    margin: 25px;
+    margin-top: 0px;
+}
+
+.movie-card-title{
+    padding: 25px;
+    background-color: darkgrey;
+    border-radius: 25px 25px 0 0;
+    font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
+}
+
+.metascore{
+    color: white;
+    width: 30px;
+    height: 30px;
+    margin: auto;
+    border-radius: 5px;
+}
+
+.sub{
+    vertical-align: middle;
+}
+
+.flex{
+    display: flex;
+    text-align: center;
+    width: 50%;
+}
+
+.justify{
+    justify-content: space-around;
+}
+
+.red{
+    background-color: red;
+}
+
+.yellow{
+    background-color: goldenrod;
+}
+
+.green{
+    background-color: green;
+}
+
+.imdb-logo{
+    width: 5%;
+    float: right;
+    border-radius: 5px;
+    margin-left: 10px;
+}
+
+.editor{
+    padding-top: 7px;
+    float: right;
+    font-family: 'Indie Flower', cursive;
+}
+
+.display-1{
+    color:white;
+    padding: 50px;
+    font-family: 'Abril Fatface', cursive;
+}

@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html  lang="en">
+		<head>
+			<meta charset="utf-8">
+			<meta name="viewport" content="width=device-width, initial-scale=1">
+			<meta http-equiv="X-UA-Compatible" content="IE=edge">
+            <title>Movie Search Project</title>	
+            <link href="https://fonts.googleapis.com/css?family=Bebas+Neue|Roboto|Fira+Sans|Indie+Flower|Abril+Fatface&display=swap" rel="stylesheet">
+            <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.19.0/axios.min.js"></script>
+            <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+            <script src="https://unpkg.com/vue-router@2.0.0/dist/vue-router.js"></script>
+			<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+			<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+			
+			<link href="style.css" rel="stylesheet">
+		</head>
+        <body>
+<div id="app" v-bind:class="{home: isHome}">
+                <nav class="navbar navbar-expand navbar-dark teal mb-4">
+                        <a class="navbar-brand" v-on:click="goHome" href="#">Movie Search</a>
+                        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                            <span class="navbar-toggler-icon"></span>
+                        </button>
+                        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                            <ul class="navbar-nav mr-auto">
+                                <li class="nav-item active">
+                                   <router-link to='/' > <span class="nav-link pb-1" v-on:click="goHome">Home </span></router-link>
+                                </li>
+                            </ul>
+                                <input class="form-control mr-sm-2" type="text" placeholder="Eg: Star Wars" v-model="query" 
+                                @keypress.enter="handleSearch">
+                               <router-link v-bind:to="'/search/' +query">
+                                    <button v-on:click="handleSearch" type="button" class="btn btn-primary">Search</button>
+                               </router-link> 
+                        </div>
+                    </nav>
+                    <div v-if="isHome" class="text-center">
+                        <h1 class="display-1">SEARCH A MOVIE</h1>
+                </div>
+            <div class="row">
+               <div class="container-fluid">    
+                <ul class="searchPage" v-if="totalResults > 0 && !isDetail && !isHome">
+                    <li v-for="movie in visibleMovies">
+                        <div class="card">
+                            <img class="mt-1 thumbnail" :src="movie.Poster"/>
+                            <span class="mt-2 mb-1 movie-title">{{ movie.Title }}</span>
+                            <hr>
+                            <span class="mt-1 mb-1 movie-year">{{ movie.Year }}</span>
+                            <hr>
+                            <router-link v-bind:to="'/movies/' +movie.imdbID">
+                                    <button v-on:click="goMovieDetail(movie.imdbID)" type="button" class="btn btn-info mb-3 mt-3">
+                                            More Info
+                                        </button>
+                            </router-link>
+                            
+                        </div>
+                    </li>
+                </ul>
+                
+            </div></div> 
+            <router-view></router-view>
+
+            <div v-if="totalResults > 0 && !isDetail && !isHome" class="row">
+                    <nav class="marginl-4" aria-label="Page navigation example">
+                            <ul class="pagination">
+                              <span v-on:click="prevPage" class="page-item page-link">Previous</span>
+                              
+                              <!-- Delete if you want pagination depends on TotalResults -->
+                              <span v-for="n in pageNumber" v-on:click="updateCurrentPage(n)" v-bind:class="{active: currentPage == n}"
+                              class="page-item page-link">{{n}}</span>
+                              <!-- End -->
+
+                              <!-- Start of Pagination depends on TotalResults -->
+
+                               <!--
+                                <span v-on:click="updateCurrentPage(1)" v-bind:class="{active: currentPage == 1}"
+                                    class="page-item page-link">{{1}}</span>
+                                <span v-if="n < 4" v-for="n in pageNumber" v-on:click="updateCurrentPage(n + 1)" v-bind:class="{active: currentPage == n + 1}"
+                                class="page-item page-link">{{n + 1}}</span>
+                                <span v-if="pageNumber > 3" class="page-item page-link">...</span> 
+                                <span v-if="pageNumber > 4" v-on:click="updateCurrentPage(pageNumber)" v-bind:class="{active: currentPage == pageNumber}"
+                              class="page-item page-link">{{pageNumber}}</span>
+                              -->
+
+                            <!-- End of Pagination depends on TotalResults -->
+
+                              
+                              <span v-on:click="nextPage" class="page-item page-link">Next</span>
+                            </ul>
+                          </nav>
+            </div>
+
+            <div>
+                <div v-if="isDetail && !isHome" class="container">
+                    <div class="movie-detail">
+                    <h1 class="my-4 movie-card-title">{{ movie.Title }} -
+                      <small>{{ movie.Year }}</small>
+                      <img class="img-fluid imdb-logo" src="img/imdb.png" />
+                      <img class="img-fluid imdb-logo" src="img/vue-badge.png" />
+                    </h1>
+
+                    <div class="row">
+                      <div class="col-md-4">
+                        <img class="img-fluid movie-poster" :src="movie.Poster"/>
+                        
+                      </div>
+                  
+                      <div class="col-md-8">
+                        <h2 class="ml-3 mb-3">{{ movie.Title }}</h2>
+                        <p class="ml-3">{{ movie.Plot }}</p>
+                        <h2 class="ml-3 my-3">Movie Details</h2>
+                        <ul>
+                          <li><span class="active">Director</span><br>{{ movie.Director }}</span></li>
+                          <li><span class="active">Actors</span><br>{{ movie.Actors }}</span></li>
+                          <li><span class="active">Release Date</span><br> {{movie.Released}}</span></li>
+                        </ul>
+                        <h2 class="ml-3 mt-3">Movie Ratings</h2>
+                        <div class="ml-3 mb-3 flex">
+                           <div class="mr-4"> Metascore <div v-bind:class="{red: movie.Metascore > 0, yellow: movie.Metascore >= 50, green: movie.Metascore >= 70}" class="metascore"><span class="sub">{{ movie.Metascore }}</span></div></div>
+                        <div class="mr-4">IMDB Rating <div v-bind:class="{red: 6 > movie.imdbRating, yellow: movie.imdbRating >= 6, green: movie.imdbRating >= 7}" class="metascore"><span class="sub">{{  movie.imdbRating }}</span></div></div>
+                        </div>
+                        <div class="mr-3 mb-3"><img  v-if="movie.Metascore > 89" class="img-fluid imdb-logo" src="img/100.png" />
+                            <img  v-if="movie.Metascore > 80 && movie.Metascore < 89" class="img-fluid imdb-logo" src="img/good.png" />
+                            <img  v-if="movie.Metascore < 80 && movie.Metascore > 55" class="img-fluid imdb-logo" src="img/norm.png" />
+                            <img  v-if="movie.Metascore < 56" class="img-fluid imdb-logo" src="img/shit.png" />
+                            <span class="editor">Editor's Rating: </span></div>
+                        
+                      </div>
+                  
+                    </div>
+                </div>
+                  </div>
+            </div>
+            
+</div>
+        
+        </body>
+        <script src="app.js"></script>
+        </html>
